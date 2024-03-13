@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+</head>
+<body>
+    <script>
+        class Graph {
+            constructor(vertices) {
+                this.numVertices = vertices; //số đỉnh
+            
+   this.adjLists = new Array(vertices).fill(null).map(() => []); 
+           //mảng chứa danh sách kề 
+  this.visited = new Array(vertices).fill(false); // biến thăm
+            }
+
+            addEdge(src, dest) {
+//thêm đỉnh đích vào ds kề của đỉnh nguồn
+this.adjLists[src].push(dest);             
+                this.adjLists[dest].push(src);
+            }
+
+            BFS(startVertex) {
+              let queue = []; // tạo 1 hàng đợi rỗng
+this.visited[startVertex] = true; //đã thăm          
+queue.push(startVertex); //thêm vào hàng đợi
+
+                while (queue.length > 0) { 
+                    let currVertex = queue.shift();//đẩy ra khỏi hàng đợi
+                    console.log("Visited " + currVertex); //in ra là đã duyệt
+                   //  Duyệt qua các đỉnh kề của đỉnh hiện tại
+                    this.adjLists[currVertex].forEach(adjVertex => {
+                      if (!this.visited[adjVertex]) { //nếu chưa được duyệt
+                       this.visited[adjVertex] = true; //đánh dấu đã thăm
+                            queue.push(adjVertex); //thêm vào hàng đợi
+                        }
+                    });
+                }
+            }
+        }
+        
+</script>
+       
+    </script>
+</body>
+</html>

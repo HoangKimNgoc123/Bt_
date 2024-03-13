@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+</head>
+<body>
+    <script>
+    const INF = 9999999; // Giá trị vô cùng lớn, đại diện cho khoảng cách không hợp lệ giữa các đỉnh
+const V = 5; // Số lượng đỉnh trong đồ thị
+
+// Đồ thị được biểu diễn bằng ma trận kề
+let graph = [
+  [0, 9, 75, 0, 0],   // Dòng 0: Khoảng cách từ đỉnh 0 đến các đỉnh khác
+  [9, 0, 95, 19, 42], // Dòng 1: Khoảng cách từ đỉnh 1 đến các đỉnh khác
+  [75, 95, 0, 51, 66],// Dòng 2: Khoảng cách từ đỉnh 2 đến các đỉnh khác
+  [0, 19, 51, 0, 31], // Dòng 3: Khoảng cách từ đỉnh 3 đến các đỉnh khác
+  [0, 42, 66, 31, 0]  // Dòng 4: Khoảng cách từ đỉnh 4 đến các đỉnh khác
+];
+
+// Hàm thực hiện thuật toán Floyd-Warshall để tìm đường đi ngắn nhất giữa mọi cặp đỉnh
+function floydWarshall() {
+  // Khởi tạo ma trận lưu trữ khoảng cách ngắn nhất ban đầu
+  let dist = [];
+  for (let i = 0; i < V; i++) {
+    dist[i] = [];
+    for (let j = 0; j < V; j++) {
+      dist[i][j] = graph[i][j]; // Sao chép ma trận kề ban đầu
+    }
+  }
+
+  // Thuật toán Floyd-Warshall
+  for (let k = 0; k < V; k++) {
+    for (let i = 0; i < V; i++) {
+      for (let j = 0; j < V; j++) {
+        // Nếu tồn tại đường đi từ đỉnh i đến đỉnh k và từ đỉnh k đến đỉnh j
+        // có chi phí tổng thấp hơn chi phí hiện tại từ đỉnh i đến đỉnh j
+        if (dist[i][k] + dist[k][j] < dist[i][j]) {
+          // Cập nhật khoảng cách ngắn nhất từ đỉnh i đến đỉnh j
+          dist[i][j] = dist[i][k] + dist[k][j];
+        }
+      }
+    }
+  }
+
+  return dist; // Trả về ma trận khoảng cách ngắn nhất
+}
+
+// Hàm hiển thị các đường đi ngắn nhất giữa mọi cặp đỉnh
+function printSolution(dist) {
+  console.log("Shortest distances between every pair of vertices:");
+  for (let i = 0; i < V; i++) {
+    for (let j = 0; j < V; j++) {
+      if (dist[i][j] == INF) {
+        console.log("INF "); // Nếu không có đường đi giữa hai đỉnh, in ra "INF"
+      } else {
+        console.log(dist[i][j] + " "); // In ra khoảng cách ngắn nhất giữa hai đỉnh
+      }
+    }
+    console.log(); // Xuống dòng cho dễ đọc
+  }
+}
+
+let dist = floydWarshall(); // Tìm đường đi ngắn nhất giữa mọi cặp đỉnh
+printSolution(dist); // Hiển thị kết quả
+
+</script>
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liệt Kê Số Nguyên Tố</title>
+    <style>
+        body {
+            background-color: #f7d1d7;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #050505;
+        }
+        p {
+            font-size:medium
+        }
+        button {         
+            background-color: #f7d1d7;
+            color: rgb(20, 18, 18);
+            border: none;
+            cursor: pointer;
+           font-size:medium
+        }
+        #ketqua {
+            margin-top: 20px;
+            color: #050505;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bài toán Liệt Kê Các Số Nguyên Tố</h1>
+<p> Liệt kê các số nguyên tố có 2 chữ số</p>
+<button type="button" onclick="ketqua()">Đáp án </button> 
+<p id="ketqua"></p>
+
+<script>
+    function check_snt(n){
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i === 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function ketqua(){
+        let snt = '';
+        for (let i = 10; i < 100; i++){
+            if (check_snt(i)) {
+                snt += i + ' ';
+            }
+        }
+        document.getElementById("ketqua").innerHTML = snt;
+    }
+</script>
+
+</body>
+</html>

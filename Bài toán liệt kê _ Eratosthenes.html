@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liệt Kê Số Nguyên Tố</title>
+    <style>
+        body {
+            background-color: #f7d1d7;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #050505;
+        }
+        p {
+            font-size: medium;
+        }
+        button {         
+            background-color: #f7d1d7;
+            color: rgb(20, 18, 18);
+            border: none;
+            cursor: pointer;
+            font-size: medium;
+        }
+        #ketqua {
+            margin-top: 20px;
+            color: #050505;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bài toán Liệt Kê Các Số Nguyên Tố _ Sàng số nguyên tố</h1>
+<p> Liệt kê các số nguyên tố có 2 chữ số</p>
+<button type="button" onclick="ketqua()">Đáp án </button> 
+<p id="ketqua"></p>
+
+<script>
+    var snt = [];
+
+    function sang_snt() {
+        // Coi tất cả các số từ 2 tới 99 là số nguyên tố, loại luôn số 0,1
+        for (let i = 2; i <= 99; i++) {
+            snt[i] = 1;
+        }
+        // Thực hiện sàng
+        for (let i = 2; i <= Math.sqrt(99); i++) {
+            if (snt[i]) {  
+                for (let j = i * i; j <= 99; j += i) {
+                    snt[j] = 0;  //Loại bỏ 
+                }
+            }
+        }
+    }
+
+    function ketqua() {
+        sang_snt();
+        let so_nt = '';
+        for (let i = 10; i <= 99; i++) {
+            if (snt[i]) {
+                so_nt += i + ' ';
+            }
+        }
+        document.getElementById("ketqua").innerHTML = so_nt;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Hoang Kim Ngoc</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #fbbaba;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 300px;
+    padding: 10px ;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#output {
+    margin-top: 20px;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+    <h2>Bài toán tối ưu_Thuật toán quy hoạch động</h2>
+    <p>   Bài toán cho thuê máy: Một ông chủ có một cái máy để cho thuê.
+        Đầu tháng ông ta nhận được yêu cầu thuê máy của m khách hàng.
+        Mỗi khách hàng i sẽ cho biết tập N, các ngày trong tháng cần
+        sử dụng máy (i = 1, 2,..., m). Ông chủ chỉ có quyền hoặc là 
+        từ chối yêu cầu của khách hàng i, hoặc là nếu nhận thì phải 
+        bố trí máy phục vụ khách hàng i đúng những ngày mà khách hàng 
+        này yêu cầu. Hỏi rằng ông chủ phải tiếp nhận các yêu cầu của
+        khách như thế nào để cho tổng số ngày sử dụng máy là lớn nhất.</p>
+    <p>Nhập các yêu cầu từ khách hàng (mỗi yêu cầu trên một dòng, bao gồm ngày bắt đầu và kết thúc):</p>
+    <textarea id="input" rows="5" cols="50"></textarea><br>
+    <button onclick="calculateMaxDays()">Tính</button>
+    <div id="output"></div>
+
+    <script>
+        function calculateMaxDays() {
+            const input = document.getElementById('input').value;
+            const maxDays = calculateMaxDaysFromInput(input);
+            document.getElementById('output').textContent = `Tổng số ngày sử dụng máy là: ${maxDays}`;
+        }
+
+        function calculateMaxDaysFromInput(input) { 
+            const requests = parseRequests(input);
+            const dp = new Array(31).fill(0); // khởi tạo mang dp có độ dài 31 và có giá trị rỗng
+                   // mảng này lưu số ngày tối đa sử dụng
+            //duyệtqua từng yêu cầu của khách hàng
+            for (const request of requests) {
+                for (let i = 30; i >= request.end; i--) {    //duyệt từ cuối tháng đến ngày cuối của lần thuê
+                    dp[i] = Math.max(dp[i], dp[request.start - 1] + request.end - request.start +1 );
+                }    // cập nhật số ngày sử dụng  máy tối đa  ở mỗi ngày trong mỗi lần thuê
+            }
+
+            let maxDays = 0; //số ngày tối đa
+            for (let i = 1; i <= 30; i++) {
+                maxDays = Math.max(maxDays, dp[i]); //cập nhật theo số ngày của từng lần thuê trong tháng
+            }
+            return maxDays;
+        }
+
+        function parseRequests(input) {
+            const lines = input.trim().split('\n');
+            const requests = [];
+
+            for (const line of lines) {
+                const [start, end] = line.trim().split(' ').map(Number);
+                if (!isNaN(start) && !isNaN(end) && start >= 1 && end >= start) {
+                    requests.push({ start, end });
+                }
+            }
+
+            return requests;
+        }
+    </script>
+</body>
+</html>

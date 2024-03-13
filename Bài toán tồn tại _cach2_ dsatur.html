@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+    <style>
+        body {
+            background-color: #f7d1d7;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+
+        button {
+            margin-bottom: 10px;
+            background-color: #77f27b;
+            color: rgb(8, 7, 7);
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h3>Bài toán tồn tại _ Tô màu bản đồ _ Thuật toán Dsatur </h3>
+    <p>Có n quốc gia trên bản đồ, tìm cách dùng 4 màu để tô cho mỗi quốc gia, sao cho láng giềng thì khác màu. Ma trận kề Cij=1 nếu nước i là hàng xóm với nước j:</p>
+    <pre id="ma-tran-ke" contenteditable="true">
+11111
+11110
+11111
+11111
+10111</pre>
+
+    <div id="map"></div>
+    <button onclick="giai_toan()">Tìm cách tô màu</button>
+    <div id="ketqua" class="solution"></div>
+
+    <script>
+        var n, C, colors, d; // khai báo các mảng và  biến toàn cục
+
+        // Hàm tạo mảng color với các thuộc tính cần thiết (xây dựng thành hàm giúp code dễ đọc)
+        function initColors() {
+            return Array.from({ length: n }, (_, index) => ({
+                color: '',
+                degree: 0,
+                saturation: 0,
+                index,
+            }));
+        }
+        
+        // Hàm cập nhật độ bão hòa cho đỉnh 
+        function updateSaturation() {
+            colors.forEach((node) => {
+                node.saturation = [...C[node.index]].filter((adj, j) => adj && colors[j].color !== '').length;
+            });                                                       // adjacency (=1) là láng giềng và đã được tô màu)
+        }
+        
+        //Hàm cập nhật độ bậc của đỉnhs
+        function updateDegrees() {
+            colors.forEach((node) => {
+                node.degree = colors.filter((_, j) => C[node.index][j]).length;
+            });
+        }
+        //Hàm tìm đỉnh tiếp theo
+        function getNextNode() {
+            return colors.reduce((prev, current) => {
+                if (current.color === '' && (prev.color === ''  || current.degree > prev.degree || (current.degree === prev.degree && current.saturation > prev.saturation))) {
+                    return current;     
+                }
+                return prev;
+            }, { color: '', degree: -1, saturation: -1 }); //Trở về mặc định
+        }
+      // Hàm hiển thị kết quả
+        function showSolution() {
+            var kq = document.getElementById('ketqua');
+            kq.innerHTML +=' Cách tô màu: ' + colors.map(node => node.color) + '<br>';
+        }
+        function giai_toan() {
+            var s = document.getElementById('ma-tran-ke').innerText;
+            C = s.split('\n').map(row => row.split('').map(Number));
+            n = C.length;
+            colors = initColors();
+            d = 0;
+
+            while (colors.some(node => node.color === '')) {
+                updateSaturation();
+                updateDegrees();
+                var currentNode = getNextNode();
+                currentNode.color = Array.from(['đỏ', 'vàng', 'tím', 'xanh']).find(color => !colors.some(node => node.color == color && C[currentNode.index][node.index]));
+            }
+
+            showSolution();
+        }
+    </script>
+</body>
+</html>

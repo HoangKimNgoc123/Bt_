@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+    <style> /* Thẻ tạo giao diện*/
+       body {
+            background-color:  #f7d1d7; /* màu nền*/
+            font-family: 'Arial', sans-serif; /*kiểu chữ*/
+            text-align: center; /*căn giữa*/
+         }
+       
+        #map {  /*chỉnh tập các ô */
+            display: flex;  
+            justify-content: center;
+            margin-top: 10px;                       
+          }
+        
+        #map .cell { /*chỉnh từng ô*)*/
+            border: 1px solid #000; /* viền*/
+            display: flex; /*căn chỉnh*/
+            align-items: center;  /* căn giữa theo chiều dọc*/
+            justify-content: center;  /* căn giữa theo chiều ngang*/
+            width: 100px; /*chiều rộng*/
+            height: 50px; /*chiều cao*/
+            font-size: 24px;/*cỡ chữ*/
+        }
+        .solution { /* khoảng cách*/
+            margin-top: 20px;
+        }
+        /* các màu tô */
+        .đỏ {
+            background-color: rgb(238, 62, 62);
+        }
+
+        .vàng {
+            background-color: yellow;
+        }
+
+        .tím {
+            background-color: #eb0cf3;
+        }
+
+        .xanh {
+            background-color: rgb(105, 230, 105);
+        }
+        button {
+            background-color: #77f27b; /*màu */
+            color: rgb(8, 7, 7); /*màu chữ*/
+            padding: 10px 20px; /*kích cỡ*/
+            cursor: pointer; /* con trỏ thay đổi thành dạng nhấp */
+        }
+
+    </style>
+    </head>
+<body>
+        <h3>Bài toán tồn tại _Tô màu bản đồ _ Thuật toán đệ quy </h3>
+        <p>Có n quốc gia trên bản đồ, 
+        tìm cách dùng 4 màu để tô cho mỗi quốc gia, 
+        sao cho láng giềng thì khác màu.
+        Ma trận kề Cij=1 nếu nước i là hàng xóm với nước j:</p>
+        <pre id="ma-tran-ke" contenteditable="true">
+11111
+11101
+11111
+10111
+11111</pre>
+        <button onclick="giai_toan()">Tìm cách tô màu</button> <!-- nhấn để tìm lời giải-->
+
+        <div id="map"> <!--hiển thị ô màu-->
+            <div class="cell" id="ma-tran-ke0"></div>
+            <div class="cell" id="ma-tran-ke1"></div>
+            <div class="cell" id="ma-tran-ke2"></div>
+            <div class="cell" id="ma-tran-ke3"></div>
+            <div class="cell" id="ma-tran-ke4"></div>
+        </div>
+
+        <div id="ketqua" class="solution"></div>
+   <!--lập trình javascript-->
+   <script>
+    var n, C, x = [], d; // Khai bảo mảnng, biến toàn cục
+    
+     // Hàm hiển thị kết quả ra màn hình 
+    function show_kq() {
+        var kq = document.getElementById('ketqua');
+        kq.innerHTML += 'Nghiệm ' + (++d) + ': Cách tô màu: ' + x + '<br>';
+        if (d == 1) { // Hiển thị nghiệm thứ nhất 
+            for (var i = 0; i < n; i++) {
+                var cellId = 'ma-tran-ke' + i;
+                var cell = document.getElementById(cellId);
+                cell.innerHTML = x[i]; 
+                // Các ô được tô màu theo giá trị nghiệm tương ứng
+                if (x[i] === 'đỏ') {
+                    cell.classList.add('đỏ');
+                } else if (x[i] === 'vàng') {
+                    cell.classList.add('vàng');
+                } else if (x[i] === 'tím') {
+                    cell.classList.add('tím');
+                } else if (x[i] === 'xanh') {
+                    cell.classList.add('xanh');
+                } 
+            }
+        }
+    }
+
+    // Hàm kiểm tra xem các nước đã tô màu thì láng giềng của nó có cùng màu hay không?
+    function check_mau(i) {
+        for (var j = 0; j < i; j++)
+            if (C[i][j] == 1 && x[i] == x[j]) // Vừa là hàng xóm vừa cùng màu
+                return false;
+        return true;
+    }
+
+    var Color = ['đỏ', 'vàng', 'tím', 'xanh'];//tạo mảng màu
+
+      // Hàm thực hiện tô màu
+    function to_mau(i) {
+        for (var mau = 0; mau < 4; mau++) {
+            x[i] = Color[mau];// Tô từng màu cho cá quốc gia
+                if (check_mau(i)) { // Thuật toán nhánh cận
+                if (i == n - 1) {// Kiểm tra đã tới nước cuối cùng chưa
+                    show_kq();
+                } else {
+                    to_mau(i + 1); // Sử dụng đệ quy
+                }
+            }
+            x[i] = ''; // Thuật toán quay lui
+        }
+    } 
+
+    function giai_toan() {
+        var s = document.getElementById('ma-tran-ke').innerText; //Tạo chuỗi s lấy dữ liệu từ ma trận kề
+        C = s.split('\n'); // Chuyển dữ liệu từ chuỗi s sang mảng C có các dòng dựa trên dấu xuống dòng
+        n = C.length;// Độ dài của mảng là số các nước
+        for (var i = 0; i < n; i++) {
+            x[i] = ''; // Khởi tạo chưa có mảng nào được tô màu
+        }
+        d = 0; //chưa có nghiệm nào
+        to_mau(0);// Gọi để thực hiện hàm tô màu//
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cho Thuê Máy</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fbbaba;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#output {
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+<script>
+      
+        function calculateTotalDays() {
+            const input = document.getElementById('input').value.trim();
+            // Lấy dữ liệu từ đầu vào input và loại bỏ khoảng trắng (hàm trim())
+            const requests = parseRequests(input);
+              // tạo mảng lưu dữ liệu đầu vào trả về sau khi xử lí 
+
+            if (requests.length === 0) { // độ dài của mảng bằng
+                document.getElementById('output').textContent = 'Vui lòng nhập các yêu cầu từ khách hàng.';
+                return;
+            }// nếu ko nhập dữ liệu đầu vào thì báo nhập
+
+            requests.sort((a, b) => a.start - b.start); // sắp xếp tăng dần ngày bắt đầu (start) thuê máy
+
+            let totalDays = 0; //khởi tạo tổng số ngày thuê máy
+            let lastDay = 0; // ngày cuối cùng máy được thuê
+
+            for (const request of requests) { //duyệt từng yêu cầu của khách hàng
+                if (request.start > lastDay) { //nếu ngày đầu lớn hơn ngày cuối cùng máy được thuê
+                    totalDays += request.end - request.start + 1; //công thức tính : số lượng = cuối - đầu +1
+                    lastDay = request.end; // gán ngày cuối máy được thuê là ngày cuối khách hàng yêu cầu
+                }
+            }
+
+            document.getElementById('output').textContent = `Tổng số ngày sử dụng máy là: ${totalDays}`;
+        } //  hiển thị ra màn hình tổng só ngày
+
+        function parseRequests(input) {
+            const lines = input.split('\n'); //chia dữ liệu thành 1 mảng các dòng dựa vào dấu xuống dòng
+            const requests = []; //tạo mảng lưu yêu cầu của khách hàng
+
+            for (const line of lines) { //đối với các dòng trong mảng lines
+                const [start, end] = line.trim().split(' ').map(Number); 
+                // từ đầu vào lưu thành 2 biến start (ngày đầu tiên thuê máy)và end(ngày cuối thuê) ( xóa bỏ khoảng trắngở đầu và cuối, chia dòng dựa trên khoảng trắng và chuyển về kiểu số)
+                if (!isNaN(start) && !isNaN(end) && start >= 1 && end >= start) {
+                    requests.push({ start, end });
+                }// nếu đầu vào là số hoặc biến start >= 1(ngày phải dương) và ngày cuối (end) > ngày đầu( start)
+            }
+            return requests; //trả về mảng lưu dữ liệu các yêu cầu của khách hàng
+        }
+</script>
+<body>
+    <div class="container">
+       
+    <h2>Bài toán tối ưu</h2>
+    <p>   Bài toán cho thuê máy: Một ông chủ có một cái máy để cho thuê.
+        Đầu tháng ông ta nhận được yêu cầu thuê máy của m khách hàng.
+        Mỗi khách hàng i sẽ cho biết tập N, các ngày trong tháng cần
+        sử dụng máy (i = 1, 2,..., m). Ông chủ chỉ có quyền hoặc là 
+        từ chối yêu cầu của khách hàng i, hoặc là nếu nhận thì phải 
+        bố trí máy phục vụ khách hàng i đúng những ngày mà khách hàng 
+        này yêu cầu. Hỏi rằng ông chủ phải tiếp nhận các yêu cầu của
+        khách như thế nào để cho tổng số ngày sử dụng máy là lớn nhất.</p>
+    <p>Nhập các yêu cầu từ khách hàng (mỗi yêu cầu trên một dòng, bao gồm ngày bắt đầu và kết thúc):</p>
+  
+        <p>Nhập các yêu cầu từ khách hàng:</p>
+        <textarea id="input" rows="5"></textarea>
+        <button onclick="calculateTotalDays()">Tính Tổng Số Ngày Sử Dụng Máy</button>
+        <p id="output"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

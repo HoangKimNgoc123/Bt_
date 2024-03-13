@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+</head>
+<body>
+    <script>
+       const INF = 9999999;
+const V = 5;
+
+//  Tạo đồ thị được biểu diễn bằng ma trận kề
+const G = [
+  [0, 9, 75, 0, 0],
+  [9, 0, 95, 19, 42],
+  [75, 95, 0, 51, 66],
+  [0, 19, 51, 0, 31],
+  [0, 42, 66, 31, 0]
+];
+
+function primAlgorithm() {
+  let noEdge = 0; //Số cạnh
+  let selected = new Array(V).fill(false); //  Theo dõi các đỉnh đã được chọn
+
+  //Đặt đỉnh bắt đầu thành true
+  selected[0] = true;
+
+  let x, y; // số cột và hàng
+
+  console.log("Edge : Weight");
+
+  while (noEdge < V - 1) {
+    let min = INF;
+    x = 0;
+    y = 0;
+
+    for (let i = 0; i < V; i++) {
+      if (selected[i]) {
+        for (let j = 0; j < V; j++) {
+          if (!selected[j] && G[i][j]) { 
+            if (min > G[i][j]) {
+              min = G[i][j];
+              x = i;
+              y = j;
+            }
+          }
+        }
+      }
+    }
+    
+    console.log(`${x} - ${y} : ${G[x][y]}`);
+    selected[y] = true;
+    noEdge++;
+  }
+}
+
+primAlgorithm();
+
+</script>
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Kim Ngoc</title>
+    <style>
+        body {
+            background-color:  #f7d1d7; 
+            font-family: 'Arial', sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #050505;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label, input, button {
+            margin: 5px;
+        }
+
+        button {
+            background-color: #77f27b; 
+            color: rgb(20, 18, 18); 
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: hsl(170, 94%, 55%); 
+        }
+
+        #ketqua {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bài toán đếm - Chỉnh hợp</h1>
+
+<form>
+    <label for="tongso">Tổng số người tham gia cuộc thi :</label> <!-- Tạo nhãn tên cho ô nhập giá trị-->
+    <input type="number" id="tongso" name="tongso" min="0" required><!-- Khai báo kiểu của giá trị nhập vào-->
+    <br>
+    <label for="duocxep">Số người muốn xếp hạng đầu tiên :</label>
+    <input type="number" id="duocxep" name="duocxep" min="0" required >
+    <br>
+    <button type="button" onclick="tinhtoan()">Đáp án</button> 
+</form>
+
+<p id="ketqua"></p>
+
+<script>
+   function tinhtoan(){
+         // Lấy giá trị từ ô nhập vào
+         var tongso = parseInt(document.getElementById("tongso").value); 
+         // Ép kiểu cho giá trị nhập vào là số nguyên
+         var duocxep = parseInt(document.getElementById("duocxep").value);
+
+         // Kiểm tra của giá trị nhập vào
+         if (isNaN(tongso) || isNaN(duocxep) || duocxep > tongso || duocxep < 0 || tongso <= 0) { 
+            // Nếu giá trị nhâp vào không phải là số (not a number) hoặc là số âm
+            alert("Vui lòng nhập số nguyên hợp lệ."); //thông báo nhập lại
+             }
+             var ketqua = 1 ;
+        for(let k = 0; k < duocxep; k++ ){
+           ketqua *= (tongso - k);
+        }
+        // Hiển thị kết quả 
+        document.getElementById("ketqua").innerHTML = "Số cách xếp hạng " + duocxep + " người đầu tiên từ " + tongso + " người là: " + ketqua + " cách";
+   }
+</script>
+
+</body>
+</html>
